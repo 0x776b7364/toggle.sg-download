@@ -7,8 +7,7 @@ Tested with:
 
 WINDOWS:
 ffmpeg.exe must be located in the same folder as the python script
-script has been tested against ffmpeg.exe in http://ffmpeg.zeranoe.com/builds/win64/static/ffmpeg-20150418-git-edbb9b5-win64-static.7z
-recent builds in Windows x64 can be found in http://ffmpeg.zeranoe.com/builds/win64/static/
+script has been tested against ffmpeg.exe in http://ffmpeg.zeranoe.com/builds/win64/static/ffmpeg-20150418-git-edbb9b5-win64-static.7z. Recent builds in Windows x64 can be found in http://ffmpeg.zeranoe.com/builds/win64/static/
 
 LINUX:
 On Ubuntu 12.04, the version of libav-tools in the repo is not updated for m3u8; hence, you'll need to build ffmpeg from source from git://source.ffmpeg.org/ffmpeg.git
