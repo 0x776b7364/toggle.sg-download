@@ -1,9 +1,9 @@
 Python script to download mp4/m3u8/wvm files from toggle.sg. Paste your video URL as the 'url' parameter.
 
 Tested with:
-[X] Python v2.7.8 on Windows 7 x86
-[X] Python v2.7.6 on Windows 7 x64
-[X] Python v2.7.3 on Ubuntu 12.04 x86 (caveats apply; see below)
+- Python v2.7.8 on Windows 7 x86
+- Python v2.7.6 on Windows 7 x64
+- Python v2.7.3 on Ubuntu 12.04 x86 (caveats apply; see below)
 
 WINDOWS:
 ffmpeg.exe must be located in the same folder as the python script
