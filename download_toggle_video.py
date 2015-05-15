@@ -124,7 +124,11 @@ print "\n[*] Selected %s" % (selectedurl)
 print "[i] Obtaining media name ..."
 medianame = jsondata["entryResult"]["meta"]["name"].replace("  ","_").replace(" ","_")
 if (debug):
-	print "[*] Obtained media name = %s" % (medianame)
+	try:
+		print "[*] Obtained media name = %s" % (medianame.decode('unicode-escape'))
+	except:
+		medianame = mediaID
+		print "[*] Unicode title encountered. New media name = %s" % (medianame)
 
 if (debug):
 	print "[i] Obtaining media duration ..."
