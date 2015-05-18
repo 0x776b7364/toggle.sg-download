@@ -13,7 +13,7 @@ debug = 0
 # sample (m3u8 and mp4) links
 #url = "http://video.toggle.sg/en/series/sabo/ep12/327339"
 #url = "http://video.toggle.sg/en/series/118-catch-up/ep126/328542"
-url = "http://video.toggle.sg/en/clips/gisele-bundchen-walks-the-runway-at-her-final-fashion-show/328324"
+url = "http://video.toggle.sg/zh/series/118-catch-up/webisodes/document/330134"
 
 # sample wvm link
 #url = "http://video.toggle.sg/en/series/marvel-s-agents-of-s-h-i-e-l-d-yr-2/ep6/327671"
@@ -123,12 +123,11 @@ print "\n[*] Selected %s" % (selectedurl)
 
 print "[i] Obtaining media name ..."
 medianame = jsondata["entryResult"]["meta"]["name"].replace("  ","_").replace(" ","_")
-if (debug):
-	try:
-		print "[*] Obtained media name = %s" % (medianame.decode('unicode-escape'))
-	except:
-		medianame = mediaID
-		print "[*] Unicode title encountered. New media name = %s" % (medianame)
+try:
+	print "[*] Obtained media name = %s" % (medianame.decode('unicode-escape'))
+except:
+	medianame = mediaID
+	print "[*] Unicode title encountered. New media name = %s" % (medianame)
 
 if (debug):
 	print "[i] Obtaining media duration ..."
