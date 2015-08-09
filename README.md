@@ -30,6 +30,6 @@ On Ubuntu 12.04, the version of libav-tools in the repo is not updated for m3u8;
 Ubuntu 15.04 has a sufficiently recent libav-tools in the stock repository.
 
 ## Mac OS X
-Install ffpmeg from [Homebrew](http://brew.sh/).
+Install ffmpeg from [Homebrew](http://brew.sh/).
 
 Note: there are many hardcoded values used, which could cause the script to break if Toggle changes their page structure
