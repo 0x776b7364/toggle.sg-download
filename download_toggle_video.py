@@ -20,6 +20,9 @@ debug = 0
 # sample wvm link
 #url = "http://video.toggle.sg/en/series/marvel-s-agents-of-s-h-i-e-l-d-yr-2/ep6/327671"
 
+if len(sys.argv) == 1:
+    print "Run the script as %s toggle_url_1 toggle_url_2 ..." % sys.argv[0]
+	
 for url in sys.argv[1:]:
 
 	print "\n[i] Given Toggle URL = %s" % (url)
@@ -140,7 +143,7 @@ for url in sys.argv[1:]:
 
 	if (selectedurl.endswith("m3u8")):
 		print "[i] Crafting ffmpeg command ..."
-		cmd = 'ffmpeg -i ' + selectedurl + " -c copy -bsf:a aac_adtstoasc " + medianame + ".mp4"
+		cmd = 'ffmpeg -i ' + selectedurl + " -c copy -bsf:a aac_adtstoasc \"" + medianame + ".mp4\""
 		print "------------------------------------------------------------"
 		print "[*] Executing the following command: "
 		print cmd
