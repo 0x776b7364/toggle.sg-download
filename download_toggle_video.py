@@ -1,6 +1,5 @@
 #!/usr/bin/env python
-# Written by 0x776b7364     #
-# with assistance from Anon #
+# Written by 0x776b7364
 
 import urllib2
 import re
@@ -10,7 +9,11 @@ import time
 import sys
 
 # set to 1 for debugging
+# note that enabling debugging writes files to disk
 debug = 0
+
+# set to 1 for auto-download (less interactive)
+autodl = 1
 
 # sample (m3u8 and mp4) links
 #url = "http://video.toggle.sg/en/series/sabo/ep12/327339"
@@ -20,12 +23,14 @@ debug = 0
 # sample wvm link
 #url = "http://video.toggle.sg/en/series/marvel-s-agents-of-s-h-i-e-l-d-yr-2/ep6/327671"
 
-if len(sys.argv) == 1:
-    print "Run the script as %s toggle_url_1 toggle_url_2 ..." % sys.argv[0]
-	
-for url in sys.argv[1:]:
+# prints usage information only
+def usage():
+    print "Run the script as %s toggle_url_1 toggle_url_2 ..." % (sys.argv[0])	
 
-	print "\n[i] Given Toggle URL = %s" % (url)
+# function takes in a video.toggle.sg URL, and returns a tuple of the direct download URL and the media name
+def parseurl(url):
+
+	print "[i] Given Toggle URL = %s" % (url)
 	urlsplit = url.split('/')
 	mediaID = urlsplit[-1]
 	if (debug):
@@ -128,7 +133,13 @@ for url in sys.argv[1:]:
 	selectedurl = urlarray[in1-1]
 	print "\n[*] Selected %s" % (selectedurl)
 
-	print "[i] Obtaining media name ..."
+	if (debug):
+		text_file = open("5.selected.txt", "a")
+		text_file.write("{}".format(selectedurl))
+		text_file.write("{}".format("\n"))
+		text_file.close()
+		
+	print "\n[i] Obtaining media name ..."
 	medianame = jsondata["entryResult"]["meta"]["name"].replace("  ","_").replace(" ","_")
 	try:
 		print "[*] Obtained media name = %s" % (medianame.decode('unicode-escape'))
@@ -140,7 +151,11 @@ for url in sys.argv[1:]:
 		print "[i] Obtaining media duration ..."
 		mediaduration = jsondata["entryResult"]["meta"]["duration"]
 		print "[*] Obtained media duration = %s" % (time.strftime("%H hrs %M mins %S secs", time.gmtime(float(mediaduration))))
+		
+	return (selectedurl, medianame)
 
+# function takes in a URL and a save-target name, and performs the download
+def download(selectedurl, medianame):
 	if (selectedurl.endswith("m3u8")):
 		print "[i] Crafting ffmpeg command ..."
 		cmd = 'ffmpeg -i ' + selectedurl + " -c copy -bsf:a aac_adtstoasc \"" + medianame + ".mp4\""
@@ -150,9 +165,12 @@ for url in sys.argv[1:]:
 		raw_input('\nPress <ENTER> to continue')
 
 		print "[i] Executing ffmpeg command ...\n"
-		os.system(cmd)
-
-		print "\n[*] " + medianame +".mp4 file created!"
+		dlrtn = os.system(cmd)
+		
+		if (dlrtn == 0):
+			print "\n[*] " + medianame +".mp4 file created!"
+		else:
+			print "\n[!] Error: ffmpeg file not found, or existing file is for incorrect architecture." 
 
 	if (selectedurl.endswith("mp4") or selectedurl.endswith("wvm")):
 		#http://stackoverflow.com/questions/22676/how-do-i-download-a-file-over-http-using-python
@@ -177,3 +195,27 @@ for url in sys.argv[1:]:
 			print status,
 
 		f.close()
+		
+def main():
+	curr = 0
+	total = len(sys.argv) - 1
+
+	if len(sys.argv) == 1:
+		usage()
+		exit(0)
+	
+	for url in sys.argv[1:]:
+		curr += 1
+		print "\n\n================================"
+		print "[*] Downloading file %i of %i ..." % (curr, total)
+		print "================================"
+		tmpurl, tmpmedianame = parseurl(url)
+		if (autodl):
+			download(tmpurl, tmpmedianame)
+		else:
+			print "[i] Autodownload is disabled"
+
+	return 0
+
+if __name__ == '__main__':
+	main()
