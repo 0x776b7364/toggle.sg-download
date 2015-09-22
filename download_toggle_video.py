@@ -37,7 +37,7 @@ def parseurl(url):
 
 	mobj = re.match(VALID_URL, url)
 	if not mobj:
-		print "[!] Invalid url %s" % url
+		print "[!] Invalid url %s" % (url)
 		return None, None
 	mediaID = mobj.group('id')
 	if (debug):
@@ -190,7 +190,7 @@ def main():
 			print "================================"
 			tmpurl, tmpmedianame = parseurl(url)
 			if not tmpurl:
-				print "[i] Unable to process %s" % url
+				print "[i] Unable to process %s" % (url)
 			elif (autodl):
 				download(tmpurl, tmpmedianame)
 			else:
