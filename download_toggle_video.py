@@ -7,6 +7,7 @@ import json
 import os
 import time
 import sys
+import argparse
 
 # set to 1 for debugging
 # note that enabling debugging writes files to disk
@@ -177,21 +178,20 @@ def download(selectedurl, medianame):
 		
 def main():
 	curr = 0
-	total = len(sys.argv) - 1
-
-	if len(sys.argv) == 1:
-		usage()
-		exit(0)
+	parser = argparse.ArgumentParser(description='Download Toggle videos.',add_help=False)
+	parser.add_argument('URL',nargs='+')
+	args = parser.parse_args()
+	total = len(args.URL)
 	
 	try:
-		for url in sys.argv[1:]:
+		for turl in args.URL:
 			curr += 1
 			print "\n\n================================"
 			print "[*] Downloading file %i of %i ..." % (curr, total)
 			print "================================"
-			tmpurl, tmpmedianame = parseurl(url)
+			tmpurl, tmpmedianame = parseurl(turl)
 			if not tmpurl:
-				print "[i] Unable to process %s" % (url)
+				print "[i] Unable to process %s" % (turl)
 			elif (autodl):
 				download(tmpurl, tmpmedianame)
 			else:
