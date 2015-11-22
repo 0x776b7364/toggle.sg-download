@@ -19,11 +19,12 @@ autodl = 1
 #url = "http://video.toggle.sg/en/series/sabo/ep12/327339"
 #url = "http://video.toggle.sg/en/series/118-catch-up/ep126/328542"
 #url = "http://video.toggle.sg/zh/series/118-catch-up/webisodes/document/330134"
+#url = "http://video.toggle.sg/en/tv-show/news/nov-2015-singapore-today-6/sun-8-nov-2015/348183"
 
 # sample wvm link
 #url = "http://video.toggle.sg/en/series/marvel-s-agents-of-s-h-i-e-l-d-yr-2/ep6/327671"
 
-VALID_URL = r"https?://video\.toggle\.sg/(?:en|zh)/(?:series|clips|movies)/.+?/(?P<id>[0-9]+)"
+VALID_URL = r"https?://video\.toggle\.sg/(?:en|zh)/(?:series|clips|movies|tv-show)/.+?/(?P<id>[0-9]+)"
 API_USER_PASS_EXPR = r'apiUser:\s*"(?P<user>[^"]+?)".+?apiPass:\s*"(?P<password>[^"]+?)"'
 
 # prints usage information only
