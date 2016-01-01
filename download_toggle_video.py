@@ -103,7 +103,7 @@ def parseurl(url):
 	for fileInfo in jsondata.get('Files', []):
 		outputurl = fileInfo.get('URL')
 		for ext in ["m3u8", "wvm", "mp4"]:
-			if outputurl.endswith(ext):
+			if outputurl.endswith(ext) and outputurl.startswith('http'):
 				urlarray.append(outputurl)
 
 	for y in range(1,len(urlarray)+1):
