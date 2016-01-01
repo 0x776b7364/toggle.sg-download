@@ -16,6 +16,9 @@ debug = 0
 # set to 1 for auto-download (less interactive)
 autodl = 1
 
+# set to 1 for script to check and download video subtitles, if present
+checkAndDlSubs = 1
+
 # sample (m3u8 and mp4) links
 #url = "http://video.toggle.sg/en/series/sabo/ep12/327339"
 #url = "http://video.toggle.sg/en/series/118-catch-up/ep126/328542"
@@ -131,14 +134,26 @@ def parseurl(url):
 		print "[i] Obtaining media duration ..."
 		mediaduration = jsondata.get("Duration") or 0
 		print "[*] Obtained media duration = %s" % (time.strftime("%H hrs %M mins %S secs", time.gmtime(float(mediaduration))))
-		
+	
+	if (checkAndDlSubs):
+		print "[i] Performing HTTP GET request to check for subtitles ..."
+		subsurl1 = "http://sub.toggle.sg:8080/toggle_api/v1.0/apiService/getSubtitleFilesForMedia?mediaId=" + mediaID 
+		subsurlresp1 = urllib2.urlopen(subsurl1).read()
+		print "[i] Performing JSON parsing ..."
+		subsurljson = json.loads(subsurlresp1)
+		if not subsurljson.get('subtitleFiles', []):
+			print "[!] No subtitles found!"
+		for sfile in subsurljson.get('subtitleFiles', []):
+			print "[i] Found " + sfile.get('subtitleFileLanguage') + " subtitles! Downloading ..."
+			download(sfile.get('subtitleFileUrl'), sfile.get('subtitleFileName'))
+	
 	return (selectedurl, medianame)
 
 # function takes in a URL and a save-target name, and performs the download
-def download(selectedurl, medianame):
+def download(selectedurl, name):
 	if (selectedurl.endswith("m3u8")):
 		print "[i] Crafting ffmpeg command ..."
-		cmd = 'ffmpeg -i ' + selectedurl + " -c copy -bsf:a aac_adtstoasc \"" + medianame + ".mp4\""
+		cmd = 'ffmpeg -i ' + selectedurl + " -c copy -bsf:a aac_adtstoasc \"" + name + ".mp4\""
 		print "------------------------------------------------------------"
 		print "[*] Executing the following command: "
 		print cmd
@@ -148,11 +163,11 @@ def download(selectedurl, medianame):
 		dlrtn = os.system(cmd)
 		
 		if (dlrtn == 0):
-			print "\n[*] " + medianame +".mp4 file created!"
+			print "\n[*] " + name +".mp4 file created!"
 		else:
 			print "\n[!] Error: ffmpeg file not found, or existing file is for incorrect architecture." 
 
-	if (selectedurl.endswith("mp4") or selectedurl.endswith("wvm")):
+	if (selectedurl.endswith("mp4") or selectedurl.endswith("wvm") or selectedurl.endswith("srt")):
 		#http://stackoverflow.com/questions/22676/how-do-i-download-a-file-over-http-using-python
 		file_name = selectedurl.split('/')[-1]
 		u = urllib2.urlopen(selectedurl)
