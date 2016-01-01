@@ -15,9 +15,9 @@ debug = 0
 
 VALID_URL = r"http?://tv\.toggle\.sg/(?:en|zh)/.+?/episodes"
 CONTENT_NAVIGATION_EXPR = r'10, 0,  (?P<content_id>[0-9]+), (?P<navigation_id>[0-9]+), isCatchup'
+EPISODE_TITLE_EXPR = r'<title>([\s\S]*?)</title>'
 # dirty regex to extract video URLs and titles
 URL_TITLE_EXPR = r'<h4.+?href="([\s\S]*?)">([\s\S]*?)</a>'
-OUTPUT_CSV_FILENAME = "urllist.output.csv"
 
 # function takes in a tv.toggle.sg episode URL, and returns a list of (video_url,title) tuples
 def parseurl(epiurl):
@@ -35,6 +35,13 @@ def parseurl(epiurl):
 	mobj = re.search(CONTENT_NAVIGATION_EXPR, urlresp, flags=re.DOTALL|re.MULTILINE)
 	contentid = mobj.group("content_id")
 	navigationid = mobj.group("navigation_id")
+	
+	# i'm sure this can be done more efficiently; i'm lousy with regex ...
+	mobj = re.search(EPISODE_TITLE_EXPR, urlresp, flags=re.DOTALL|re.MULTILINE)
+	seriestitle = mobj.group(0).decode('unicode_escape').encode('ascii','ignore')
+	seriestitle = " ".join(seriestitle.split())
+	seriestitle = re.sub(r"\s+", "_", seriestitle[8:-8])
+	print "[*] Series name = %s" % (seriestitle)
 	
 	if (debug):
 		print "[*] Obtained content_id = %s" % (contentid)
@@ -55,14 +62,14 @@ def parseurl(epiurl):
 	if (debug):
 		print mobj
 	
-	return mobj
+	return (seriestitle, mobj)
 
 # function writes the episode URLs and titles to a CSV file
-def writeCsv(urllist):
+def writeCsv(title, urllist):
 
 	print "[i] Exporting to CSV ..."
-
-	text_file = open(OUTPUT_CSV_FILENAME, "w")
+	outputfile = title + ".csv"
+	text_file = open(outputfile, "w")
 	
 	# writing a table of URL,title
 	for url in urllist:
@@ -93,11 +100,11 @@ def main():
 			print "\n\n================================"
 			print "[*] Processing URL %i of %i ..." % (curr, total)
 			print "================================"
-			urllist = parseurl(turl)
+			seriestitle, urllist = parseurl(turl)
 			if not urllist:
 				print "[i] Unable to process %s" % (turl)
 			else:
-				writeCsv(urllist)
+				writeCsv(seriestitle, urllist)
 	except (KeyboardInterrupt, SystemExit):
 		print "\n[i] Bye!"
 		sys.exit(0)
