@@ -39,10 +39,6 @@ FILE_PREFERENCES = [(1,"STB","m3u8"),	# generally 720p
 					(3,'IPAD','m3u8'),	# generally 540p
 					(4,'IPH','m3u8')]	# generally 360p
 
-# prints usage information only
-def usage():
-	print "Run the script as %s toggle_url_1 toggle_url_2 ..." % (sys.argv[0])  
-
 # function takes in a video.toggle.sg URL, and returns a tuple of the direct download URL and the media name
 def parseurl(url):
 
