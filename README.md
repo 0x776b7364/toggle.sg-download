@@ -1,24 +1,34 @@
 Python script to download mp4/m3u8/wvm files from toggle.sg.
 
+This new and updated program:
+- supports selection of the file quality to download
+- supports 'episode' or 'series' URLs
+- supports selection of episodes from a series
+- implementes a more correct 'auto-download' function that is fully non-interactive post-command
+- supports multi-threaded downloads
+- has some modifications made in preparation for Python 3 (but is not fully supported on that version yet)
+
 # Usage
 On Linux and Mac OS X, first make the script executable:
 
-`chmod +x download_toggle_video.py`
+`chmod +x download_toggle_video2.py`
 
 Then run the script with as many Toggle URLs as you want:
 
-`./download_toggle_video.py http://video.toggle.sg/blah http://video.toggle.sg/blerk ...`
+`./download_toggle_video2.py http://video.toggle.sg/blah http://video.toggle.sg/blerk ...`
+
+Or, you can include 'episode' URLs as such:
+
+`./download_toggle_video2.py http://video.toggle.sg/blah http://tv.toggle.sg/en/channel8/shows/blerk/episodes ...`
 
 On Windows, if you installed Python from the official binaries, you should already have the necessary file associations, so the following command line should work from the script directory:
 
-`download_toggle_video.py http://video.toggle.sg/blah http://video.toggle.sg/blerk ...`
+`download_toggle_video2.py http://video.toggle.sg/blah http://video.toggle.sg/blerk ...`
 
 Tested with:
-- Python v2.7.8 on Windows 7 x86
 - Python v2.7.6 on Windows 7 x64
-- Python v2.7.3 on Ubuntu 12.04 x86 (caveats apply; see below)
-- Python v2.7.9 on Ubuntu 15.04 x86
-- Python v2.7.5 on Mac OS X Mavericks
+- Python v2.7.11 on Windows 7 x64
+
 
 # Installation Notes
 ## Windows
