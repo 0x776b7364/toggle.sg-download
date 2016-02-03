@@ -24,12 +24,12 @@ except ImportError:
 	
 # set to 1 for debugging
 # note that enabling debugging writes files to disk
-DEBUG = 1
+DEBUG = 0
 
 # set to 1 for auto-download (less interactive)
 # for videos, this would auto-select the best quality file
 # for episodes, this would auto-select all episodes in the series
-AUTO_DOWNLOAD = 0
+AUTO_DOWNLOAD = 1
 
 # set to 1 for script to check and download video subtitles, if present
 CHECK_AND_DOWNLOAD_SUBTITLES = 1
