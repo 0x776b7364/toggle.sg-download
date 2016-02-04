@@ -37,6 +37,18 @@ CHECK_AND_DOWNLOAD_SUBTITLES = 1
 # set the number of download threads here
 NO_OF_DOWNLOAD_THREADS = 2
 
+# preferred order of file formats to download
+# highest preference is first
+# in some cases, mp4 is the only downloadable file even though
+#   m3u8 is in the URL list
+FILE_PREFERENCES = 	[(1,'STB','m3u8'),	# generally 720p, Set-top Box, requires ffmpeg
+					(2,'ADD','mp4'),	# generally 540p, Android device
+					(3,'IPAD','m3u8'),	# generally 540p, iPad, requires ffmpeg
+					(4,'IPH','m3u8')]	# generally 360p, iPhone, requires ffmpeg
+
+# only download direct-accessible files i.e. ignore streaming files
+#FILE_PREFERENCES =	[(1,,'ADD','mp4')]
+
 ########## END USER CONFIGURATION ##########
 
 # sample (m3u8 and mp4) links
@@ -58,17 +70,9 @@ VALID_EPISODES_URL = r"http?://tv\.toggle\.sg/(?:en|zh)/.+?/episodes"
 CONTENT_NAVIGATION_EXPR = r'10, 0,  (?P<content_id>[0-9]+), (?P<navigation_id>[0-9]+), isCatchup'
 EPISODE_TITLE_EXPR = r'<title>([\s\S]*?)</title>'
 URL_TITLE_EXPR = r'<h4.+?href="([\s\S]*?)">([\s\S]*?)</a>'
+FORMAT_EXPR = r'(?:STB|IPH|IPAD|ADD)'
 
 URL_CATEGORY = ['t_video','t_episodes']
-
-# preferred order of file formats to download
-# highest preference is first
-# in some cases, mp4 is the only downloadable file even though
-#   m3u8 is in the URL list
-FILE_PREFERENCES = [(1,"STB","m3u8"),	# generally 720p, Set-top Box, requires ffmpeg
-					(2,'ADD','mp4'),	# generally 540p, Android device
-					(3,'IPAD','m3u8'),	# generally 540p, iPad, requires ffmpeg
-					(4,'IPH','m3u8')]	# generally 360p, iPhone, requires ffmpeg
 
 MAIN_DOWNLOAD_QUEUE = Queue.Queue()
 
@@ -229,32 +233,6 @@ def process_video_url(t_video_url):
 		text_file.write("{}".format(json.dumps(download_url_resp_json,indent=4)))
 		text_file.close()
 
-	print("[i] Obtaining URL records from download URL response ...\n")
-	temp_urlList = []
-	for fileInfo in download_url_resp_json.get('Files', []):
-		urlRecord = fileInfo.get('URL')
-		for ext in ["m3u8", "wvm", "mp4"]:
-			if urlRecord.startswith('http') and urlRecord.endswith(ext):
-				temp_urlList.append((urlRecord,urlRecord))
-
-	# the auto-download function chooses only one URL based on the ranking in FILE_PREFERENCES
-	if (AUTO_DOWNLOAD):
-		temp_queue1 = Queue.Queue()
-		
-		for priority,quality,format in FILE_PREFERENCES:
-			for url in temp_urlList:
-				if re.search(quality, url[0]) and re.search(format, url[0]):
-					temp_queue1.put(url)
-					if (DEBUG):
-						print("[-] Inserted into queue: %s" % (url[0]))
-
-		autoSelectedUrl = temp_queue1.get()
-		queued_urls.append(autoSelectedUrl)
-		print("\n[i] Auto-selected URL: %s" % (autoSelectedUrl[1]))
-	else:
-		print("[i] Entering video selection function ...\n")
-		queued_urls = user_select_options(temp_urlList)
-	
 	print("\n[i] Obtaining media name ...")
 	medianame = re.sub(r"\s+", "_", download_url_resp_json.get("MediaName", "UNKNOWN"))
 	try:
@@ -262,6 +240,33 @@ def process_video_url(t_video_url):
 	except UnicodeEncodeError:
 		medianame = mediaID
 		print("[i] Unicode title encountered. New media name = %s" % (medianame))
+
+	print("[i] Obtaining URL records from download URL response ...\n")
+	temp_urlList = []
+	for fileInfo in download_url_resp_json.get('Files', []):
+		urlRecord = fileInfo.get('URL')
+		for ext in ["m3u8", "wvm", "mp4"]:
+			if urlRecord.startswith('http') and urlRecord.endswith(ext):
+				fileformat = re.findall(FORMAT_EXPR, urlRecord, flags=re.DOTALL|re.MULTILINE)
+				temp_urlList.append((medianame+"_"+fileformat[0],urlRecord))
+
+	# the auto-download function chooses only one URL based on the ranking in FILE_PREFERENCES
+	if (AUTO_DOWNLOAD):
+		temp_queue1 = Queue.Queue()
+		
+		for priority,quality,format in FILE_PREFERENCES:
+			for url in temp_urlList:
+				if re.search(quality, url[1]) and re.search(format, url[1]):
+					temp_queue1.put(url)
+					if (DEBUG):
+						print("[i] Inserted into temporary queue: %s" % (url[1]))
+
+		autoSelectedUrl = temp_queue1.get()
+		queued_urls.append(autoSelectedUrl)
+		print("\n[i] Auto-selected URL: %s" % (autoSelectedUrl[1]))
+	else:
+		print("[i] Entering video selection function ...\n")
+		queued_urls = user_select_options(temp_urlList)
 
 	if (DEBUG):
 		print("[i] Obtaining media duration ...")
