@@ -48,6 +48,10 @@ Pretty self-explanatory.
 Default: 2
 
 Specifies the number of download threads. More threads = quicker download completion.
+## FILE_PREFERENCES
+Default: Highest to lowest priority: STB-ADD-IPAD-IPH
+
+Specifies the download file format preference, in order.
 
 # ffmpeg Dependency Notes
 ## Windows
