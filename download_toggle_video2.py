@@ -76,7 +76,8 @@ URL_CATEGORY = ['t_video','t_episodes']
 
 MAIN_DOWNLOAD_QUEUE = Queue.Queue()
 
-#http://www.blog.pythonlibrary.org/2012/08/01/python-concurrency-an-example-of-a-queue/
+# Page: http://www.blog.pythonlibrary.org/2012/08/01/python-concurrency-an-example-of-a-queue/
+# Author: Mike Driscoll
 class Downloader(threading.Thread):
 
 	def __init__(self, queue, debug = False):
@@ -106,7 +107,8 @@ class Downloader(threading.Thread):
 				print("\n[!] Error: ffmpeg file not found, or existing file is for incorrect architecture.")
 
 		if (url.endswith("mp4") or url.endswith("wvm") or url.endswith("srt")):
-			#http://stackoverflow.com/questions/22676/how-do-i-download-a-file-over-http-using-python
+			# Page: http://stackoverflow.com/questions/22676/how-do-i-download-a-file-over-http-using-python
+			# Author: PabloG
 			file_name = url.split('/')[-1]
 			u = urllib_request.urlopen(url)
 			f = open(file_name, 'wb')
