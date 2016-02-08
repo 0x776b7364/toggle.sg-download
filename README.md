@@ -4,7 +4,7 @@ This new and updated program:
 - supports selection of the file quality to download
 - supports 'episode' or 'series' URLs
 - supports selection of episodes from a series
-- implementes a more correct 'auto-download' function that is fully non-interactive post-command
+- implements a more correct 'auto-download' function that is fully non-interactive post-command
 - supports multi-threaded downloads
 - has some modifications made in preparation for Python 3 (but is not fully supported on that version yet)
 
