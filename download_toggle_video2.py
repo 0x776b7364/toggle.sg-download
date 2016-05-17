@@ -237,6 +237,7 @@ def process_video_url(t_video_url):
 
 	print("\n[i] Obtaining media name ...")
 	medianame = re.sub(r"\s+", "_", download_url_resp_json.get("MediaName", "UNKNOWN"))
+	medianame = re.sub('[^a-zA-Z0-9-]', '_', medianame)
 	try:
 		print("[i] Obtained media name = %s" % (medianame.decode('unicode-escape')))
 	except UnicodeEncodeError:
