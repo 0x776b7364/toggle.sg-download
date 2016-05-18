@@ -104,7 +104,7 @@ class Downloader(threading.Thread):
 			if (download_return_val == 0):
 				print("\n[*] " + name +".mp4 file created!")
 			else:
-				print("\n[!] Error: ffmpeg file not found, or existing file is for incorrect architecture.")
+				print("\n[!] Error: ffmpeg file not found, or existing file is for incorrect architecture, or download was interrupted prematurely.")
 
 		if (url.endswith("mp4") or url.endswith("wvm") or url.endswith("srt")):
 			# Page: http://stackoverflow.com/questions/22676/how-do-i-download-a-file-over-http-using-python
