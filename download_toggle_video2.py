@@ -348,7 +348,8 @@ def process_episodes_url(t_episodes_url):
 	
 	print("\n[i] Processing selected episodes ...")
 	for episode in episodes_list_selected:
-		queued_urls.append(process_video_url(episode[1])[0])
+		for record in process_video_url(episode[1]):
+			queued_urls.append(record)
 		
 	print("[i] Completed episodes processing!")
 	return queued_urls
