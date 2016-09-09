@@ -427,6 +427,10 @@ def main():
 			else:
 				print("[!] Nothing to download for %s" % (input_url))
 			
+		if  MAIN_DOWNLOAD_QUEUE.empty():
+			print("[!] No files in queue. Quitting ...")
+			sys.exit(0)		
+		
 		print("\n[i] Starting download of queued URLs ...\n")
 		for i in range(NO_OF_DOWNLOAD_THREADS):
 			t = Downloader(MAIN_DOWNLOAD_QUEUE, DEBUG)
