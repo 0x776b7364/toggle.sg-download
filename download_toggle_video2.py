@@ -264,9 +264,13 @@ def process_video_url(t_video_url):
 					if (DEBUG):
 						print("[i] Inserted into temporary queue: %s" % (url[1]))
 
-		autoSelectedUrl = temp_queue1.get()
-		queued_urls.append(autoSelectedUrl)
-		print("\n[i] Auto-selected URL: %s" % (autoSelectedUrl[1]))
+		if temp_queue1.empty():
+			print("[!] No files selected based on FILE_PREFERENCES")
+			print("[i] Consider relaxing preference criteria, or setting AUTO_DOWNLOAD to 0\n")
+		else:
+			autoSelectedUrl = temp_queue1.get()			
+			queued_urls.append(autoSelectedUrl)
+			print("\n[i] Auto-selected URL: %s" % (autoSelectedUrl[1]))
 	else:
 		print("[i] Entering video selection function ...\n")
 		queued_urls = user_select_options(temp_urlList)
