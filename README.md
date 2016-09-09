@@ -29,6 +29,7 @@ Tested with:
 - Python v2.7.6 on Windows 7 x64
 - Python v2.7.11 on Windows 7 x64
 - Python v2.7.11 on Windows 10 10586.104 x64
+- Python v2.7.12 on Xubuntu 16.04 x64
 
 # Configuration Options
 
