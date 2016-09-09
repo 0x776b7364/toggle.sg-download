@@ -251,7 +251,8 @@ def process_video_url(t_video_url):
 		for ext in ["m3u8", "wvm", "mp4"]:
 			if urlRecord.startswith('http') and urlRecord.endswith(ext):
 				fileformat = re.findall(FORMAT_EXPR, urlRecord, flags=re.DOTALL|re.MULTILINE)
-				temp_urlList.append((medianame+"_"+fileformat[0],urlRecord))
+				if fileformat:
+					temp_urlList.append((medianame+"_"+fileformat[0],urlRecord))
 
 	# the auto-download function chooses only one URL based on the ranking in FILE_PREFERENCES
 	if (AUTO_DOWNLOAD):
