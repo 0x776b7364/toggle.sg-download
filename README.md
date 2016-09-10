@@ -25,6 +25,10 @@ On Windows, if you installed Python from the official binaries, you should alrea
 
 `download_toggle_video2.py http://video.toggle.sg/blah http://video.toggle.sg/blerk ...`
 
+Debug mode can be enabled with the ```-d``` parameter like so:
+
+`./download_toggle_video2.py -d http://video.toggle.sg/blah`
+
 Tested with:
 - Python v2.7.6 on Windows 7 x64
 - Python v2.7.11 on Windows 7 x64
@@ -34,10 +38,6 @@ Tested with:
 # Configuration Options
 
 The following configuration options are directly editable in the script file:
-## DEBUG
-Default: 0 (disable debug mode)
-
-Set to 1 for verbose output to console, as well as write intermediate output to text files.
 ## AUTO_DOWNLOAD
 Default: 0 (do not auto-download)
 
