@@ -42,12 +42,12 @@ NO_OF_DOWNLOAD_THREADS = 2
 # in some cases, mp4 is the only downloadable file even though
 #   m3u8 is in the URL list
 FILE_PREFERENCES = 	[(1,'STB','m3u8'),	# generally 720p, Set-top Box, requires ffmpeg
-					(2,'ADD','mp4'),	# generally 540p, Android device
-					(3,'IPAD','m3u8'),	# generally 540p, iPad, requires ffmpeg
-					(4,'IPH','m3u8')]	# generally 360p, iPhone, requires ffmpeg
+			(2,'ADD','mp4'),	# generally 540p, Android device
+			(3,'IPAD','m3u8'),	# generally 540p, iPad, requires ffmpeg
+			(4,'IPH','m3u8')]	# generally 360p, iPhone, requires ffmpeg
 
 # only download direct-accessible files i.e. ignore streaming files
-#FILE_PREFERENCES =	[(1,,'ADD','mp4')]
+#FILE_PREFERENCES =	[(1,'ADD','mp4')]
 
 ########## END USER CONFIGURATION ##########
 
