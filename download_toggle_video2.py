@@ -9,6 +9,7 @@ import sys
 import argparse
 import threading
 import random
+import logging
 
 try:
 	import Queue
@@ -75,6 +76,22 @@ FORMAT_EXPR = r'(?:STB|IPH|IPAD|ADD)'
 URL_CATEGORY = ['t_video','t_episodes']
 
 MAIN_DOWNLOAD_QUEUE = Queue.Queue()
+
+# logging attributes
+logger = logging.getLogger('download_toggle')
+formatter = logging.Formatter('[%(levelname).1s] %(message)s')
+
+## console logging
+ch = logging.StreamHandler()
+ch.setLevel(logging.INFO)
+ch.setFormatter(formatter)
+logger.addHandler(ch)
+
+## file logging
+fh = logging.FileHandler('toggleerror.log')
+fh.setLevel(logging.DEBUG)
+fh.setFormatter(formatter)
+logger.addHandler(fh)
 
 # Page: http://www.blog.pythonlibrary.org/2012/08/01/python-concurrency-an-example-of-a-queue/
 # Author: Mike Driscoll
@@ -407,9 +424,13 @@ def user_select_options(recordsList):
 def main():
 	currParam = 0
 	parser = argparse.ArgumentParser(description='Download Toggle videos.',add_help=True)
+	parser.add_argument('-d','--debug',help="Print debugging statements",
+		action="store_const",dest="loglevel",const=logging.DEBUG,default=logging.INFO)
 	parser.add_argument('URL',nargs='+',help="Toggle video or episodes URL")
+
 	args = parser.parse_args()
 	totalParams = len(args.URL)
+	logger.setLevel(args.loglevel)
 	
 	print_script_header()
 	
