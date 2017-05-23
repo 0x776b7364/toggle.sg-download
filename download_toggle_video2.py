@@ -39,9 +39,13 @@ CHECK_AND_DOWNLOAD_SUBTITLES = 1
 # in some cases, mp4 is the only downloadable file even though
 #   m3u8 is in the URL list
 FILE_PREFERENCES = 	[(1,'STB','m3u8'),	# generally 720p, Set-top Box, requires ffmpeg
-			(2,'ADD','mp4'),	# generally 540p, Android device
-			(3,'IPAD','m3u8'),	# generally 540p, iPad, requires ffmpeg
-			(4,'IPH','m3u8')]	# generally 360p, iPhone, requires ffmpeg
+			(2,'hlstv_hd','m3u8'),
+			(3,'web_hd','m3u8'),
+			(4,'ADD','mp4'),	# generally 540p, Android device
+			(5,'IPAD','m3u8'),	# generally 540p, iPad, requires ffmpeg
+			(6,'tablet_hd','m3u8'),
+			(7,'IPH','m3u8'),
+			(8,'mobile_hd','m3u8')]	# generally 360p, iPhone, requires ffmpeg
 
 # only download direct-accessible files i.e. ignore streaming files
 #FILE_PREFERENCES =	[(1,'ADD','mp4')]
@@ -67,7 +71,7 @@ VALID_EPISODES_URL = r"http?://tv\.toggle\.sg/(?:en|zh)/.+?/episodes"
 CONTENT_NAVIGATION_EXPR = r'10, 0,  (?P<content_id>[0-9]+), (?P<navigation_id>[0-9]+), isCatchup'
 EPISODE_TITLE_EXPR = r'<title>([\s\S]*?)</title>'
 URL_TITLE_EXPR = r'<h4.+?href="([\s\S]*?)">([\s\S]*?)</a>'
-FORMAT_EXPR = r'(?:STB|IPH|IPAD|ADD)'
+FORMAT_EXPR = r'(?:STB|IPH|IPAD|ADD|mobile_hd|web_hd|hlstv_hd|tablet_hd)'
 
 URL_CATEGORY = ['t_video','t_episodes']
 
@@ -194,7 +198,11 @@ def process_video_url(t_video_url):
 	logger.debug("Obtained mediaID = %s" % (mediaID))
 	
 	logger.debug("Performing HTTP GET request on Toggle video URL ...")
-	t_video_url_resp = urllib_request.urlopen(t_video_url).read()
+	#t_video_url_resp = urllib_request.urlopen(t_video_url).read()
+	
+	t_video_url_req = urllib_request.Request(t_video_url)
+	t_video_url_req.add_header('User-Agent', USER_AGENT)
+	t_video_url_resp = urllib_request.urlopen(t_video_url_req).read()
 	
 	if (logger.isEnabledFor(logging.DEBUG)):
 		text_file = open("v1.t_video_url_resp.txt", "w")
@@ -225,7 +233,7 @@ def process_video_url(t_video_url):
 	}
 	
 	logger.debug("Performing HTTP GET request on download URL ...")
-	download_url_req_url = "http://tvpapi.as.tvinci.com/v2_9/gateways/jsonpostgw.aspx?m=GetMediaInfo"
+	download_url_req_url = "http://tvpapi.as.tvinci.com/v3_9/gateways/jsonpostgw.aspx?m=GetMediaInfo"
 	download_url_req_params = json.dumps(download_url_params).encode("utf-8")
 	download_url_resp = urllib_request.urlopen(download_url_req_url, download_url_req_params).read()
 	
@@ -273,7 +281,7 @@ def process_video_url(t_video_url):
 
 		if temp_queue1.empty():
 			logger.error("No files selected based on FILE_PREFERENCES")
-			logger.error("Consider relaxing preference criteria, or setting AUTO_DOWNLOAD to 0")
+			logger.error("Consider relaxing preference criteria, or setting '--no-autodl'")
 		else:
 			autoSelectedUrl = temp_queue1.get()			
 			queued_urls.append(autoSelectedUrl)
