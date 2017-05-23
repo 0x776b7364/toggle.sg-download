@@ -23,16 +23,16 @@ except ImportError:
 
 ########## START USER CONFIGURATION ##########
 
-# set to 1 for auto-download (less interactive)
+# enabled by default
+# disable by using the argument --no-autodl
 # for videos, this would auto-select the best quality file
 # for episodes, this would auto-select all episodes in the series
 AUTO_DOWNLOAD = 1
 
-# set to 1 for script to check and download video subtitles, if present
+# enabled by default
+# disable by using the argument --no-subs
+# if enabled, script will check and download video subtitles if present
 CHECK_AND_DOWNLOAD_SUBTITLES = 1
-
-# set the number of download threads here
-NO_OF_DOWNLOAD_THREADS = 2
 
 # preferred order of file formats to download
 # highest preference is first
@@ -412,11 +412,21 @@ def main():
 	parser = argparse.ArgumentParser(description='Download Toggle videos.',add_help=True)
 	parser.add_argument('-d','--debug',help="Print debugging statements to stdout and files",
 		action="store_const",dest="loglevel",const=logging.DEBUG,default=logging.INFO)
+	parser.add_argument('-t','--threads',help="Number of download threads",
+		dest="download_threads",default=2)
+	parser.add_argument('--no-autodl',help="Disable auto-download",action='store_true')
+	parser.add_argument('--no-subs',help="Disable subtitle downloads",action='store_true')
 	parser.add_argument('URL',nargs='+',help="Toggle video or episodes URL")
 
 	args = parser.parse_args()
 	totalParams = len(args.URL)
 	logger.setLevel(args.loglevel)
+	
+	if args.no_autodl is True:
+		AUTO_DOWNLOAD = 0
+		
+	if args.no_subs is True:
+		CHECK_AND_DOWNLOAD_SUBTITLES = 0
 
 	if (logger.getEffectiveLevel() == logging.DEBUG):
 		## file logging
@@ -446,7 +456,7 @@ def main():
 			sys.exit(0)		
 		
 		logger.info("Starting download of queued URLs ...")
-		for i in range(NO_OF_DOWNLOAD_THREADS):
+		for i in range(int(args.download_threads)):
 			t = Downloader(MAIN_DOWNLOAD_QUEUE)
 			t.setDaemon(True)
 			t.start()
