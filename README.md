@@ -37,23 +37,14 @@ Tested with:
 
 # Configuration Options
 
-The following configuration options are directly editable in the script file:
-## AUTO_DOWNLOAD
-Default: 0 (do not auto-download)
-
-Set to 1 to enable auto-download of media files. The order of file formats in FILE_PREFERENCES can also be changed if you prefer ADD-mp4 to be of a higher priority than STB-m3u8.
-## CHECK_AND_DOWNLOAD_SUBTITLES
-Default: 1 (enable)
-
-Pretty self-explanatory.
-## NO_OF_DOWNLOAD_THREADS
-Default: 2
-
-Specifies the number of download threads. More threads = quicker download completion.
+The following configuration option is directly editable in the script file:
 ## FILE_PREFERENCES
 Default: Highest to lowest priority: STB-ADD-IPAD-IPH
 
 Specifies the download file format preference, in order.
+
+
+For other options, run ``` download_toggle_video2.py -h```.
 
 # ffmpeg Dependency Notes
 ## Windows
