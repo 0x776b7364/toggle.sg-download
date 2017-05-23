@@ -431,12 +431,6 @@ def main():
 	args = parser.parse_args()
 	totalParams = len(args.URL)
 	logger.setLevel(args.loglevel)
-	
-	if args.no_autodl is True:
-		AUTO_DOWNLOAD = 0
-		
-	if args.no_subs is True:
-		CHECK_AND_DOWNLOAD_SUBTITLES = 0
 
 	if (logger.getEffectiveLevel() == logging.DEBUG):
 		## file logging
@@ -446,6 +440,17 @@ def main():
 		logger.addHandler(fh)
 
 	print_script_header()
+	
+	global AUTO_DOWNLOAD
+	global CHECK_AND_DOWNLOAD_SUBTITLES
+	
+	if args.no_autodl is True:
+		logger.info("Auto-download is disabled")
+		AUTO_DOWNLOAD = 0
+		
+	if args.no_subs is True:
+		logger.info("Subtitle check is disabled")
+		CHECK_AND_DOWNLOAD_SUBTITLES = 0
 	
 	try:
 		for input_url in args.URL:
