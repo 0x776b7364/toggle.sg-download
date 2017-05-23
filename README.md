@@ -59,3 +59,7 @@ Ubuntu 15.04 has a sufficiently recent libav-tools in the stock repository.
 Install ffmpeg from [Homebrew](http://brew.sh/).
 
 Note: there are many hardcoded values used, which could cause the script to break if Toggle changes their page structure
+
+# Other
+
+I'm aware that the ```youtube-dl``` project (https://github.com/rg3/youtube-dl/) has support for Toggle links. Consider using their program if my script does not work for you.
