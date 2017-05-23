@@ -73,6 +73,8 @@ URL_CATEGORY = ['t_video','t_episodes']
 
 MAIN_DOWNLOAD_QUEUE = Queue.Queue()
 
+USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.133 Safari/537.36'
+
 # logging attributes
 logger = logging.getLogger('download_toggle')
 formatter = logging.Formatter('[%(levelname).1s] %(message)s')
@@ -309,7 +311,11 @@ def process_episodes_url(t_episodes_url):
 	logger.info("Toggle episodes %s detected" % (t_episodes_url))
 	
 	logger.debug("Performing HTTP GET request on Toggle episodes URL ...")
-	t_episodes_url_resp = urllib_request.urlopen(t_episodes_url).read()
+	#t_episodes_url_resp = urllib_request.urlopen(t_episodes_url).read()
+	
+	t_episodes_url_req = urllib_request.Request(t_episodes_url)
+	t_episodes_url_req.add_header('User-Agent', USER_AGENT)
+	t_episodes_url_resp = urllib_request.urlopen(t_episodes_url_req).read()
 	
 	contentNavigationRegex = re.search(CONTENT_NAVIGATION_EXPR, t_episodes_url_resp, flags=re.DOTALL|re.MULTILINE)
 	contentid = contentNavigationRegex.group("content_id")
@@ -331,7 +337,11 @@ def process_episodes_url(t_episodes_url):
 	episodeListUrl = 'http://tv.toggle.sg/en/blueprint/servlet/toggle/paginate?pageSize=99&pageIndex=0&contentId=' + contentid + '&navigationId=' + navigationid + '&isCatchup=1'
 	logger.debug("Performing HTTP GET request on Toggle blueprint URL:")
 	logger.debug(episodeListUrl)
-	episodeListResp = urllib_request.urlopen(episodeListUrl).read()
+	#episodeListResp = urllib_request.urlopen(episodeListUrl).read()
+	
+	episodeList_req = urllib_request.Request(episodeListUrl)
+	episodeList_req.add_header('User-Agent', USER_AGENT)
+	episodeListResp = urllib_request.urlopen(episodeList_req).read()
 
 	if (logger.isEnabledFor(logging.DEBUG)):
 		text_file = open("e1.episodeListUrl.txt", "w")
