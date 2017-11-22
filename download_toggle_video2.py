@@ -103,7 +103,7 @@ class Downloader(threading.Thread):
 		
 		if (url.endswith("m3u8")):
 			logger.debug("Crafting ffmpeg command ...")
-			ffmpeg_download_cmd = 'ffmpeg -hide_banner -loglevel info -i ' + url + " -c copy -bsf:a aac_adtstoasc \"" + name + ".mp4\""
+			ffmpeg_download_cmd = 'ffmpeg -hide_banner -loglevel info -i ' + url + " -c copy \"" + name + ".mp4\""
 			logger.debug(ffmpeg_download_cmd)
 			logger.debug("Executing ffmpeg command ...")
 			try:
@@ -296,7 +296,7 @@ def process_video_url(t_video_url):
 	
 	if (CHECK_AND_DOWNLOAD_SUBTITLES):
 		logger.debug("Performing HTTP GET request to check for subtitles ...")
-		subtitle_link = "http://sub.toggle.sg:8080/toggle_api/v1.0/apiService/getSubtitleFilesForMedia?mediaId=" + mediaID 
+		subtitle_link = "https://sub.toggle.sg/toggle_api/v1.0/apiService/getSubtitleFilesForMedia?mediaId=" + mediaID 
 		subtitle_link_resp = urllib_request.urlopen(subtitle_link).read()
 		logger.debug("Performing JSON parsing ...")
 		subtitle_link_resp_json = json.loads(subtitle_link_resp)
