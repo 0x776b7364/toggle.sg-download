@@ -103,7 +103,7 @@ class Downloader(threading.Thread):
 		
 		if (url.endswith("m3u8")):
 			logger.debug("Crafting ffmpeg command ...")
-			ffmpeg_download_cmd = 'ffmpeg -hide_banner -loglevel info -i ' + url + " -c copy \"" + name + ".mp4\""
+			ffmpeg_download_cmd = 'ffmpeg -hide_banner -loglevel info -i ' + url + " -c copy -bsf:a aac_adtstoasc \"" + name + ".mp4\""
 			logger.debug(ffmpeg_download_cmd)
 			logger.debug("Executing ffmpeg command ...")
 			try:
