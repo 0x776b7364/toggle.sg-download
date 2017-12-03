@@ -101,7 +101,7 @@ class Downloader(threading.Thread):
 		name = record[0]
 		url = record[1]
 		
-		if (url.endswith("m3u8")):
+		if (url.lower().endswith("m3u8")):
 			logger.debug("Crafting ffmpeg command ...")
 			ffmpeg_download_cmd = 'ffmpeg -hide_banner -loglevel info -i ' + url + " -c copy -bsf:a aac_adtstoasc \"" + name + ".mp4\""
 			logger.debug(ffmpeg_download_cmd)
@@ -116,8 +116,7 @@ class Downloader(threading.Thread):
 				logger.info("" + name + ".mp4 file created!")
 			else:
 				logger.error("ffmpeg file not found, or existing file is for incorrect architecture, or download was interrupted prematurely.")
-
-		if (url.endswith("mp4") or url.endswith("wvm") or url.endswith("srt")):
+		elif (url.lower().endswith("mp4") or url.lower().endswith("wvm") or url.lower().endswith("srt")):
 			# Page: http://stackoverflow.com/questions/22676/how-do-i-download-a-file-over-http-using-python
 			# Author: PabloG
 			file_name = url.split('/')[-1]
@@ -143,6 +142,8 @@ class Downloader(threading.Thread):
 					status = status + chr(8)*(len(status)+1)
 					print(status)
 			f.close()
+		else:
+			logger.error("Unhandled file extension: " + url)
 
 		logger.info("Thread %s completed" % (self.name))
 		
@@ -303,7 +304,7 @@ def process_video_url(t_video_url):
 		if not subtitle_link_resp_json.get('subtitleFiles', []):
 			logger.warning("No subtitles found!")
 		for sfile in subtitle_link_resp_json.get('subtitleFiles', []):
-			logger.info("Found " + sfile.get('subtitleFileLanguage') + " subtitles! Adding to queue list ...")
+			logger.info("Found " + sfile.get('subtitleFileLanguage') + " subtitles! Adding " + sfile.get('subtitleFileUrl') + " to queue list ...")
 			queued_urls.append(("Subtitles for "+mediaID,sfile.get('subtitleFileUrl')))
 
 	return queued_urls
