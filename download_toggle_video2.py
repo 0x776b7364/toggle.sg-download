@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# Written by 0x776b7364
 
 import re
 import json
@@ -157,7 +156,6 @@ class Downloader(threading.Thread):
 def print_script_header():
 	print("\n=====================================")
 	print("Toggle video and episodes downloader")
-	print("by 0x776b7364")
 	print("=====================================")
 
 def process_url(url):
