@@ -58,7 +58,39 @@ Ubuntu 15.04 has a sufficiently recent libav-tools in the stock repository.
 ## Mac OS X
 Install ffmpeg from [Homebrew](http://brew.sh/).
 
+```shell
+$ brew install ffmpeg
+```
+
 Note: there are many hardcoded values used, which could cause the script to break if Toggle changes their page structure
+
+# Reporting issues
+
+Before reporting an issue, please make sure that your issue is still present with the latest copy of the script.
+
+If the issue still persists, please run the script with the `-d` debug flag, like so:
+```shell
+$ ./download_toggle_video2.py -d http://video.toggle.sg/blah
+```
+
+The output should be pasted into either the issue form field, or into a Pastebin-like site, and the particular paste referenced in the issue.
+
+To really make my day, provide the contents of the debug files by uploading them to said Pastebin-like site, and reference them in the issue as well. These files are automatically-created when the debug flag is present:
+- v1.t_video_url_resp.txt
+- v2.download_url_resp.txt
+- v3.download_url_resp_json.txt
+- e1.episodeListUrl.txt (only if input contains an episode URL)
+
+Also, please try to describe the issue in more detail especially in the title. Titles like "cannot work" or "cannot download anything" are not very useful (because.. you wouldn't be posting an issue if it was working).
+
+# Acknowledgements
+
+This script would not be possible without the various contributors, and the people out there who submit bug reports. In particular, I'd like to thank:
+- @ping
+- @gromgit
+- @freemanang1989
+- @JackeJR
+- @peterhoeg
 
 # Other
 
