@@ -79,6 +79,7 @@ To really make my day, provide the contents of the debug files by uploading them
 - v1.t_video_url_resp.txt
 - v2.download_url_resp.txt
 - v3.download_url_resp_json.txt
+- s1.selected_records.txt
 - e1.episodeListUrl.txt (only if input contains an episode URL)
 
 Also, please try to describe the issue in more detail especially in the title. Titles like "cannot work" or "cannot download anything" are not very useful (because.. you wouldn't be posting an issue if it was working).
