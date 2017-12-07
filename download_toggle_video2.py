@@ -154,9 +154,9 @@ class Downloader(threading.Thread):
 			self.queue.task_done()
 			
 def print_script_header():
-	print("\n=====================================")
+	print("\n+++++++++++++++++++++++++++++++++++++")
 	print("Toggle video and episodes downloader")
-	print("=====================================")
+	print("+++++++++++++++++++++++++++++++++++++")
 
 def process_url(url):
 	"""
@@ -462,9 +462,9 @@ def main():
 	try:
 		for input_url in args.URL:
 			currParam += 1
-			print("\n================================")
+			print("\n+++++++++++++++++++++++++++++++++++++")
 			print("[*] Processing input %i of %i ..." % (currParam, totalParams))
-			print("================================")
+			print("+++++++++++++++++++++++++++++++++++++")
 			
 			records_to_enqueue = process_url(input_url)
 			if records_to_enqueue:
@@ -491,7 +491,7 @@ def main():
 	except (SystemExit):
 		logger.info("Quitting ...")
 	
-	logger.info("=== Script execution complete! ===\n\n")
+	logger.info("+++ Script execution complete! +++\n\n")
 	
 if __name__ == '__main__':
 	main()
