@@ -43,8 +43,12 @@ FILE_PREFERENCES = 	[(1,'STB','m3u8'),	# generally 720p, Set-top Box, requires f
 			(4,'ADD','mp4'),	# generally 540p, Android device
 			(5,'IPAD','m3u8'),	# generally 540p, iPad, requires ffmpeg
 			(6,'tablet_hd','m3u8'),
-			(7,'IPH','m3u8'),
-			(8,'mobile_hd','m3u8')]	# generally 360p, iPhone, requires ffmpeg
+			(7,'IPH','m3u8'),	# generally 360p, iPhone, requires ffmpeg
+			(8,'mobile_hd','m3u8'),
+			(9,'hlstv_sd','m3u8'),
+			(10,'web_sd','m3u8'),
+			(11,'tablet_sd','m3u8'),
+			(12,'mobile_sd','m3u8')]
 
 # only download direct-accessible files i.e. ignore streaming files
 #FILE_PREFERENCES =	[(1,'ADD','mp4')]
@@ -70,7 +74,7 @@ VALID_EPISODES_URL = r"http?://tv\.toggle\.sg/(?:en|zh)/.+?/episodes"
 CONTENT_NAVIGATION_EXPR = r'10, 0,  (?P<content_id>[0-9]+), (?P<navigation_id>[0-9]+), isCatchup'
 EPISODE_TITLE_EXPR = r'<title>([\s\S]*?)</title>'
 URL_TITLE_EXPR = r'<h4.+?href="([\s\S]*?)">([\s\S]*?)</a>'
-FORMAT_EXPR = r'(?:STB|IPH|IPAD|ADD|mobile_hd|web_hd|hlstv_hd|tablet_hd)'
+FORMAT_EXPR = r'(?:STB|IPH|IPAD|ADD|mobile_hd|web_hd|hlstv_hd|tablet_hd|mobile_sd|web_sd|hlstv_sd|tablet_sd)'
 
 URL_CATEGORY = ['t_video','t_episodes']
 
@@ -102,7 +106,7 @@ class Downloader(threading.Thread):
 		
 		if (url.lower().endswith("m3u8")):
 			logger.debug("Crafting ffmpeg command ...")
-			ffmpeg_download_cmd = 'ffmpeg -hide_banner -loglevel info -i ' + url + " -c copy -bsf:a aac_adtstoasc \"" + name + ".mp4\""
+			ffmpeg_download_cmd = "ffmpeg -user-agent \"" + USER_AGENT + "\" -headers 'origin: http://video.toggle.sg/\r\n' -hide_banner -loglevel info -i " + url + " -c copy -bsf:a aac_adtstoasc \"" + name + ".mp4\""
 			logger.debug(ffmpeg_download_cmd)
 			logger.debug("Executing ffmpeg command ...")
 			try:
@@ -262,10 +266,12 @@ def process_video_url(t_video_url):
 	temp_urlList = []
 	for fileInfo in download_url_resp_json.get('Files', []):
 		urlRecord = fileInfo.get('URL')
+		logger.debug("Examining urlRecord %s ...", urlRecord)
 		for ext in ["m3u8", "wvm", "mp4"]:
 			if urlRecord.startswith('http') and urlRecord.endswith(ext):
 				fileformat = re.findall(FORMAT_EXPR, urlRecord, flags=re.DOTALL|re.MULTILINE)
 				if fileformat:
+					logger.debug("Appending urlRecord %s to temp_urlList ...", urlRecord)
 					temp_urlList.append((medianame+"_"+fileformat[0],urlRecord))
 
 	# the auto-download function chooses only one URL based on the ranking in FILE_PREFERENCES
