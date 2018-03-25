@@ -106,7 +106,10 @@ class Downloader(threading.Thread):
 		
 		if (url.lower().endswith("m3u8")):
 			logger.debug("Crafting ffmpeg command ...")
-			ffmpeg_download_cmd = "ffmpeg -user-agent \"" + USER_AGENT + "\" -headers 'origin: http://video.toggle.sg/\r\n' -hide_banner -loglevel info -i " + url + " -c copy -bsf:a aac_adtstoasc \"" + name + ".mp4\""
+
+			ffmpeg_download_cmd_str = 'ffmpeg -user_agent "%s" -hide_banner -loglevel info -i "%s" -c copy -bsf:a aac_adtstoasc "%s.mp4"'
+			ffmpeg_download_cmd = ffmpeg_download_cmd_str % (USER_AGENT, url, name)
+
 			logger.debug(ffmpeg_download_cmd)
 			logger.debug("Executing ffmpeg command ...")
 			try:
@@ -453,6 +456,10 @@ def main():
 		logger.addHandler(fh)
 
 	print_script_header()
+
+	logger.debug(os.uname())
+	logger.debug(sys.platform)
+	logger.debug(sys.version)
 	
 	global AUTO_DOWNLOAD
 	global CHECK_AND_DOWNLOAD_SUBTITLES
