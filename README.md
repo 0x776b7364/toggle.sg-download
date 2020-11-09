@@ -8,6 +8,8 @@ This new and updated program:
 - supports multi-threaded downloads
 - has some modifications made in preparation for Python 3 (but is not fully supported on that version yet)
 
+Note: the project has entered Archival state in Nov 2020. Thanks for your support!
+
 # Usage
 On Linux and Mac OS X, first make the script executable:
 
